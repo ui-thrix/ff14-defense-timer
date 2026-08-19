@@ -6,7 +6,9 @@
 <title>FF14 Defense Timer</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box
+}
 
 html,body{
   margin:0;
@@ -27,6 +29,11 @@ body{
   gap:4px;
   padding:5px
 }
+
+
+/* ========================================
+   タイトルバー
+======================================== */
 
 #titlebar{
   height:15px;
@@ -62,6 +69,11 @@ body{
   color:#fff
 }
 
+
+/* ========================================
+   タイマーバー
+======================================== */
+
 #timerBar{
   display:flex;
   gap:3px;
@@ -70,6 +82,11 @@ body{
   border-radius:7px;
   background:rgba(20,20,25,.94)
 }
+
+
+/* ========================================
+   通常タイマー
+======================================== */
 
 .timer{
   width:86px;
@@ -91,7 +108,9 @@ body{
   transform:translateY(1px)
 }
 
+
 /* ジョブ表示 */
+
 .job{
   display:flex;
   align-items:center;
@@ -105,7 +124,9 @@ body{
   background:rgba(0,0,0,.18)
 }
 
+
 /* ジョブアイコン */
+
 .jobIcon{
   width:17px;
   height:17px;
@@ -114,15 +135,19 @@ body{
   flex-shrink:0
 }
 
+
 /* ジョブ略称 */
+
 .jobAbbr{
   line-height:1
 }
+
 
 .separator{
   height:1px;
   background:rgba(255,255,255,.13)
 }
+
 
 .time{
   display:flex;
@@ -134,6 +159,9 @@ body{
   font-variant-numeric:tabular-nums
 }
 
+
+/* READY */
+
 .timer.ready{
   background:rgba(45,45,52,.96)
 }
@@ -143,32 +171,44 @@ body{
   color:rgba(255,255,255,.9)
 }
 
+
+/* 残り10秒以下 */
+
 .timer.warning{
   background:rgba(126,99,0,.97)
 }
+
+
+/* 残り5秒以下 */
 
 .timer.danger{
   background:rgba(155,35,40,.98)
 }
 
-/* ガーディアン */
+
+/* ========================================
+   ガーディアン
+======================================== */
+
 #guardianBar{
   display:flex;
-  align-items:center;
-  gap:5px
+  align-items:center
 }
 
+
 .guardianTimer{
-  width:126px;
-  height:42px;
+  width:86px;
+  height:66px;
   padding:0;
   border:1px solid rgba(255,255,255,.22);
   border-radius:5px;
   background:rgba(55,45,38,.96);
   color:#fff;
   cursor:pointer;
+  overflow:hidden;
+
   display:grid;
-  grid-template-columns:64px 1px 61px;
+  grid-template-rows:22px 1px 42px;
   align-items:center
 }
 
@@ -180,41 +220,78 @@ body{
   transform:translateY(1px)
 }
 
-.guardianLabel{
-  font-size:10px;
-  font-weight:800;
-  letter-spacing:.5px;
-  color:rgba(255,255,255,.72)
+
+/* ガーディアンアイコン部分 */
+
+.guardianJob{
+  height:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.18)
 }
 
+
+.guardianIcon{
+  width:17px;
+  height:17px;
+  object-fit:contain;
+  display:block
+}
+
+
+/* 区切り線 */
+
 .guardianSeparator{
-  width:1px;
-  height:24px;
+  width:100%;
+  height:1px;
   background:rgba(255,255,255,.14)
 }
 
+
+/* ガーディアン時間 */
+
 .guardianTime{
-  font-size:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:42px;
+
+  font-size:20px;
   font-weight:900;
   font-variant-numeric:tabular-nums
 }
+
+
+/* ガーディアン READY */
 
 .guardianTimer.ready{
   background:rgba(45,45,52,.96)
 }
 
+.guardianTimer.ready .guardianTime{
+  font-size:16px;
+  color:rgba(255,255,255,.9)
+}
+
+
+/* ガーディアン 残り10秒以下 */
+
 .guardianTimer.warning{
   background:rgba(126,99,0,.97)
 }
+
+
+/* ガーディアン 残り5秒以下 */
 
 .guardianTimer.danger{
   background:rgba(155,35,40,.98)
 }
 
-.guardianHint{
-  font-size:9px;
-  color:#777
-}
+
+/* ========================================
+   コントロール
+======================================== */
 
 #controls{
   display:flex;
@@ -241,6 +318,11 @@ body{
 .control:hover{
   background:#3b3b43
 }
+
+
+/* ========================================
+   設定画面
+======================================== */
 
 #settings{
   display:none;
@@ -285,23 +367,57 @@ body{
   gap:5px;
   margin-top:6px
 }
+
 </style>
 </head>
+
 
 <body>
 
 <div id="app">
 
+
+  <!-- ========================================
+       タイトルバー
+  ======================================== -->
+
   <div id="titlebar">
-    <span>FF14 Defense Timer</span>
+
+    <span>
+      FF14 Defense Timer
+    </span>
 
     <span class="buttons">
-      <button class="winbtn" id="minimize">−</button>
-      <button class="winbtn" id="close">×</button>
+
+      <button
+        class="winbtn"
+        id="minimize"
+      >
+        −
+      </button>
+
+      <button
+        class="winbtn"
+        id="close"
+      >
+        ×
+      </button>
+
     </span>
+
   </div>
 
+
+  <!-- ========================================
+       5つの防御タイマー
+  ======================================== -->
+
   <div id="timerBar"></div>
+
+
+  <!-- ========================================
+       ガーディアン
+  ======================================== -->
 
   <div id="guardianBar">
 
@@ -310,14 +426,31 @@ body{
       id="guardianTimer"
       title="ナイト：ガーディアン"
     >
-      <span class="guardianLabel">GUARDIAN</span>
+
+      <span class="guardianJob">
+
+        <img
+          src="icons/Guardian.png"
+          class="guardianIcon"
+          alt="Guardian"
+        >
+
+      </span>
+
       <span class="guardianSeparator"></span>
-      <span class="guardianTime">READY</span>
+
+      <span class="guardianTime">
+        READY
+      </span>
+
     </button>
 
-    <span class="guardianHint">Gキー / クリック</span>
-
   </div>
+
+
+  <!-- ========================================
+       操作
+  ======================================== -->
 
   <div id="controls">
 
@@ -325,11 +458,19 @@ body{
       1～5：開始 / もう一度：リセット
     </span>
 
-    <button class="control" id="settingsButton">
+    <button
+      class="control"
+      id="settingsButton"
+    >
       ジョブ設定
     </button>
 
   </div>
+
+
+  <!-- ========================================
+       ジョブ設定
+  ======================================== -->
 
   <div id="settings">
 
@@ -340,20 +481,31 @@ body{
     <div id="jobSettings"></div>
 
     <div class="actions">
-      <button class="control" id="resetAll">
+
+      <button
+        class="control"
+        id="resetAll"
+      >
         全READY
       </button>
 
-      <button class="control" id="closeSettings">
+      <button
+        class="control"
+        id="closeSettings"
+      >
         閉じる
       </button>
+
     </div>
 
   </div>
 
+
 </div>
 
+
 <script>
+
 
 /* ========================================
    ジョブ一覧
@@ -361,32 +513,141 @@ body{
 
 const JOBS=[
 
-  {abbr:"PLD",name:"ナイト",icon:"PLD.png"},
-  {abbr:"WAR",name:"戦士",icon:"WAR.png"},
-  {abbr:"DRK",name:"暗黒騎士",icon:"DRK.png"},
-  {abbr:"GNB",name:"ガンブレイカー",icon:"GNB.png"},
+  {
+    abbr:"PLD",
+    name:"ナイト",
+    icon:"PLD.png"
+  },
 
-  {abbr:"WHM",name:"白魔道士",icon:"WHM.png"},
-  {abbr:"SCH",name:"学者",icon:"SCH.png"},
-  {abbr:"AST",name:"占星術師",icon:"AST.png"},
-  {abbr:"SGE",name:"賢者",icon:"SGE.png"},
+  {
+    abbr:"WAR",
+    name:"戦士",
+    icon:"WAR.png"
+  },
 
-  {abbr:"MNK",name:"モンク",icon:"MNK.png"},
-  {abbr:"DRG",name:"竜騎士",icon:"DRG.png"},
-  {abbr:"NIN",name:"忍者",icon:"NIN.png"},
-  {abbr:"SAM",name:"侍",icon:"SAM.png"},
-  {abbr:"RPR",name:"リーパー",icon:"RPR.png"},
-  {abbr:"VPR",name:"ヴァイパー",icon:"VPR.png"},
+  {
+    abbr:"DRK",
+    name:"暗黒騎士",
+    icon:"DRK.png"
+  },
 
-  {abbr:"BRD",name:"吟遊詩人",icon:"BRD.png"},
-  {abbr:"MCH",name:"機工士",icon:"MCH.png"},
-  {abbr:"DNC",name:"踊り子",icon:"DNC.png"},
+  {
+    abbr:"GNB",
+    name:"ガンブレイカー",
+    icon:"GNB.png"
+  },
 
-  {abbr:"BLM",name:"黒魔道士",icon:"BLM.png"},
-  {abbr:"SMN",name:"召喚士",icon:"SMN.png"},
-  {abbr:"RDM",name:"赤魔道士",icon:"RDM.png"},
-  {abbr:"PCT",name:"ピクトマンサー",icon:"PCT.png"},
-  {abbr:"BLU",name:"青魔道士",icon:"BLU.png"}
+
+  {
+    abbr:"WHM",
+    name:"白魔道士",
+    icon:"WHM.png"
+  },
+
+  {
+    abbr:"SCH",
+    name:"学者",
+    icon:"SCH.png"
+  },
+
+  {
+    abbr:"AST",
+    name:"占星術師",
+    icon:"AST.png"
+  },
+
+  {
+    abbr:"SGE",
+    name:"賢者",
+    icon:"SGE.png"
+  },
+
+
+  {
+    abbr:"MNK",
+    name:"モンク",
+    icon:"MNK.png"
+  },
+
+  {
+    abbr:"DRG",
+    name:"竜騎士",
+    icon:"DRG.png"
+  },
+
+  {
+    abbr:"NIN",
+    name:"忍者",
+    icon:"NIN.png"
+  },
+
+  {
+    abbr:"SAM",
+    name:"侍",
+    icon:"SAM.png"
+  },
+
+  {
+    abbr:"RPR",
+    name:"リーパー",
+    icon:"RPR.png"
+  },
+
+  {
+    abbr:"VPR",
+    name:"ヴァイパー",
+    icon:"VPR.png"
+  },
+
+
+  {
+    abbr:"BRD",
+    name:"吟遊詩人",
+    icon:"BRD.png"
+  },
+
+  {
+    abbr:"MCH",
+    name:"機工士",
+    icon:"MCH.png"
+  },
+
+  {
+    abbr:"DNC",
+    name:"踊り子",
+    icon:"DNC.png"
+  },
+
+
+  {
+    abbr:"BLM",
+    name:"黒魔道士",
+    icon:"BLM.png"
+  },
+
+  {
+    abbr:"SMN",
+    name:"召喚士",
+    icon:"SMN.png"
+  },
+
+  {
+    abbr:"RDM",
+    name:"赤魔道士",
+    icon:"RDM.png"
+  },
+
+  {
+    abbr:"PCT",
+    name:"ピクトマンサー",
+    icon:"PCT.png"
+  },
+
+  {
+    abbr:"BLU",
+    name:"青魔道士",
+    icon:"BLU.png"
+  }
 
 ];
 
@@ -395,10 +656,19 @@ const JOBS=[
    基本設定
 ======================================== */
 
-const KEY="ff14-defense-jobs-app-v1";
-const COOLDOWN=30;
+const KEY=
+  "ff14-defense-jobs-app-v1";
 
-let selected=load();
+const COOLDOWN=
+  30;
+
+
+/* ========================================
+   状態
+======================================== */
+
+let selected=
+  load();
 
 const timers=[
   null,
@@ -408,11 +678,12 @@ const timers=[
   null
 ];
 
-let guardianTimer=null;
+let guardianTimer=
+  null;
 
 
 /* ========================================
-   保存・読み込み
+   設定読み込み
 ======================================== */
 
 function load(){
@@ -425,35 +696,54 @@ function load(){
       );
 
     if(
-      Array.isArray(x)&&
-      x.length===5&&
+
+      Array.isArray(x) &&
+
+      x.length===5 &&
+
       x.every(
+
         n=>
-          Number.isInteger(n)&&
-          n>=0&&
+          Number.isInteger(n) &&
+          n>=0 &&
           n<JOBS.length
+
       )
+
     ){
+
       return x;
+
     }
 
   }catch(e){}
 
+
   return [
+
     1,
     2,
     3,
     0,
     4
+
   ];
+
 }
 
+
+/* ========================================
+   設定保存
+======================================== */
 
 function save(){
 
   localStorage.setItem(
+
     KEY,
+
     JSON.stringify(selected)
+
   );
 
 }
@@ -471,20 +761,37 @@ const bar=
 const buttons=[];
 
 
-for(let i=0;i<5;i++){
+for(
+
+  let i=0;
+
+  i<5;
+
+  i++
+
+){
 
   const b=
     document.createElement(
       "button"
     );
 
+
   b.className=
     "timer ready";
 
+
   b.innerHTML=`
+
     <span class="job">
-      <img class="jobIcon" alt="">
+
+      <img
+        class="jobIcon"
+        alt=""
+      >
+
       <span class="jobAbbr"></span>
+
     </span>
 
     <span class="separator"></span>
@@ -492,12 +799,16 @@ for(let i=0;i<5;i++){
     <span class="time">
       READY
     </span>
+
   `;
+
 
   b.onclick=
     ()=>toggleTimer(i);
 
+
   bar.appendChild(b);
+
 
   buttons.push(b);
 
@@ -505,7 +816,7 @@ for(let i=0;i<5;i++){
 
 
 /* ========================================
-   ガーディアン
+   ガーディアンボタン
 ======================================== */
 
 const guardianButton=
@@ -515,39 +826,54 @@ const guardianButton=
 
 
 /* ========================================
-   表示更新
+   ジョブ表示更新
 ======================================== */
 
 function render(){
 
-  for(let i=0;i<5;i++){
+  for(
+
+    let i=0;
+
+    i<5;
+
+    i++
+
+  ){
 
     const job=
       JOBS[selected[i]];
+
 
     const icon=
       buttons[i].querySelector(
         ".jobIcon"
       );
 
+
     const abbr=
       buttons[i].querySelector(
         ".jobAbbr"
       );
 
+
     icon.src=
       "icons/"+job.icon;
+
 
     icon.alt=
       job.abbr;
 
+
     abbr.textContent=
       job.abbr;
+
 
     buttons[i].title=
       `${job.name} (${job.abbr})`;
 
   }
+
 
   renderSettings();
 
@@ -555,7 +881,7 @@ function render(){
 
 
 /* ========================================
-   ジョブ設定
+   ジョブ設定画面
 ======================================== */
 
 function renderSettings(){
@@ -565,35 +891,52 @@ function renderSettings(){
       "jobSettings"
     );
 
+
   box.innerHTML="";
 
-  for(let i=0;i<5;i++){
+
+  for(
+
+    let i=0;
+
+    i<5;
+
+    i++
+
+  ){
 
     const row=
       document.createElement(
         "div"
       );
 
+
     row.className=
       "setting";
+
 
     const n=
       document.createElement(
         "strong"
       );
 
+
     n.textContent=
       i+1;
+
 
     const select=
       document.createElement(
         "select"
       );
 
+
     select.className=
       "jobSelect";
 
+
     JOBS.forEach(
+
       (job,index)=>{
 
         const o=
@@ -601,19 +944,25 @@ function renderSettings(){
             "option"
           );
 
+
         o.value=
           index;
+
 
         o.textContent=
           `${job.abbr} — ${job.name}`;
 
+
         o.selected=
           index===selected[i];
+
 
         select.appendChild(o);
 
       }
+
     );
+
 
     select.onchange=()=>{
 
@@ -622,18 +971,24 @@ function renderSettings(){
           select.value
         );
 
+
       save();
+
 
       render();
 
     };
+
 
     row.append(
       n,
       select
     );
 
-    box.appendChild(row);
+
+    box.appendChild(
+      row
+    );
 
   }
 
@@ -641,30 +996,41 @@ function renderSettings(){
 
 
 /* ========================================
-   防御タイマー
+   通常タイマー開始 / リセット
 ======================================== */
 
 function toggleTimer(i){
 
   timers[i]=
+
     timers[i]===null
-      ? performance.now()+COOLDOWN*1000
+
+      ? performance.now()
+        +COOLDOWN*1000
+
       : null;
+
 
   updateTimer(i);
 
 }
 
 
+/* ========================================
+   通常タイマー更新
+======================================== */
+
 function updateTimer(i){
 
   const b=
     buttons[i];
 
+
   const t=
     b.querySelector(
       ".time"
     );
+
 
   b.classList.remove(
     "ready",
@@ -672,52 +1038,88 @@ function updateTimer(i){
     "danger"
   );
 
+
   if(
+
     timers[i]===null
+
   ){
 
     b.classList.add(
       "ready"
     );
 
+
     t.textContent=
       "READY";
+
 
     return;
 
   }
 
+
   const r=
     Math.max(
+
       0,
-      (timers[i]-performance.now())/1000
+
+      (
+        timers[i]
+        -
+        performance.now()
+
+      )/1000
+
     );
 
-  if(r<=0){
 
-    timers[i]=null;
+  if(
+
+    r<=0
+
+  ){
+
+    timers[i]=
+      null;
+
 
     b.classList.add(
       "ready"
     );
 
+
     t.textContent=
       "READY";
+
 
     return;
 
   }
 
-  t.textContent=
-    r.toFixed(1)+"s";
 
-  if(r<=5){
+  t.textContent=
+    r.toFixed(1)
+    +"s";
+
+
+  if(
+
+    r<=5
+
+  ){
 
     b.classList.add(
       "danger"
     );
 
-  }else if(r<=10){
+  }
+
+  else if(
+
+    r<=10
+
+  ){
 
     b.classList.add(
       "warning"
@@ -729,20 +1131,29 @@ function updateTimer(i){
 
 
 /* ========================================
-   ガーディアンタイマー
+   ガーディアン開始 / リセット
 ======================================== */
 
 function toggleGuardian(){
 
   guardianTimer=
+
     guardianTimer===null
-      ? performance.now()+COOLDOWN*1000
+
+      ? performance.now()
+        +COOLDOWN*1000
+
       : null;
+
 
   updateGuardian();
 
 }
 
+
+/* ========================================
+   ガーディアン更新
+======================================== */
 
 function updateGuardian(){
 
@@ -751,58 +1162,95 @@ function updateGuardian(){
       ".guardianTime"
     );
 
+
   guardianButton.classList.remove(
     "ready",
     "warning",
     "danger"
   );
 
+
   if(
+
     guardianTimer===null
+
   ){
 
     guardianButton.classList.add(
       "ready"
     );
 
+
     t.textContent=
       "READY";
+
 
     return;
 
   }
 
+
   const r=
     Math.max(
+
       0,
-      (guardianTimer-performance.now())/1000
+
+      (
+        guardianTimer
+        -
+        performance.now()
+
+      )/1000
+
     );
 
-  if(r<=0){
 
-    guardianTimer=null;
+  if(
+
+    r<=0
+
+  ){
+
+    guardianTimer=
+      null;
+
 
     guardianButton.classList.add(
       "ready"
     );
 
+
     t.textContent=
       "READY";
+
 
     return;
 
   }
 
-  t.textContent=
-    r.toFixed(1)+"s";
 
-  if(r<=5){
+  t.textContent=
+    r.toFixed(1)
+    +"s";
+
+
+  if(
+
+    r<=5
+
+  ){
 
     guardianButton.classList.add(
       "danger"
     );
 
-  }else if(r<=10){
+  }
+
+  else if(
+
+    r<=10
+
+  ){
 
     guardianButton.classList.add(
       "warning"
@@ -812,6 +1260,10 @@ function updateGuardian(){
 
 }
 
+
+/* ========================================
+   ガーディアン：クリック
+======================================== */
 
 guardianButton.onclick=
   toggleGuardian;
@@ -822,44 +1274,65 @@ guardianButton.onclick=
 ======================================== */
 
 document.addEventListener(
+
   "keydown",
+
   e=>{
 
     if(
-      e.target.tagName==="SELECT"||
+
+      e.target.tagName==="SELECT" ||
       e.target.tagName==="INPUT"
+
     ){
+
       return;
+
     }
 
+
+    /* 1～5 */
+
     if(
+
       /^[1-5]$/.test(e.key)
+
     ){
 
       e.preventDefault();
 
+
       toggleTimer(
+
         Number(e.key)-1
+
       );
 
     }
 
+
+    /* Gキー */
+
     if(
+
       e.key.toLowerCase()==="g"
+
     ){
 
       e.preventDefault();
+
 
       toggleGuardian();
 
     }
 
   }
+
 );
 
 
 /* ========================================
-   設定ボタン
+   ジョブ設定ボタン
 ======================================== */
 
 document.getElementById(
@@ -874,6 +1347,10 @@ document.getElementById(
 
 };
 
+
+/* ========================================
+   設定を閉じる
+======================================== */
 
 document.getElementById(
   "closeSettings"
@@ -896,13 +1373,24 @@ document.getElementById(
   "resetAll"
 ).onclick=()=>{
 
-  for(let i=0;i<5;i++){
+  for(
 
-    timers[i]=null;
+    let i=0;
+
+    i<5;
+
+    i++
+
+  ){
+
+    timers[i]=
+      null;
 
   }
 
-  guardianTimer=null;
+
+  guardianTimer=
+    null;
 
 };
 
@@ -911,16 +1399,23 @@ document.getElementById(
    Electron版対応
 ======================================== */
 
-if(window.ff14App){
+if(
+
+  window.ff14App
+
+){
 
   document.getElementById(
     "close"
   ).onclick=
+
     ()=>window.ff14App.close();
+
 
   document.getElementById(
     "minimize"
   ).onclick=
+
     ()=>window.ff14App.minimize();
 
 }
@@ -932,13 +1427,23 @@ if(window.ff14App){
 
 function loop(){
 
-  for(let i=0;i<5;i++){
+  for(
+
+    let i=0;
+
+    i<5;
+
+    i++
+
+  ){
 
     updateTimer(i);
 
   }
 
+
   updateGuardian();
+
 
   requestAnimationFrame(
     loop
@@ -952,6 +1457,7 @@ function loop(){
 ======================================== */
 
 render();
+
 
 requestAnimationFrame(
   loop
