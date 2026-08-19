@@ -4,53 +4,297 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>FF14 Defense Timer</title>
+
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:transparent}
-body{color:#fff;font-family:"Segoe UI",Arial,sans-serif;user-select:none;overflow:hidden}
-#app{display:flex;flex-direction:column;gap:4px;padding:5px}
-#titlebar{height:15px;display:flex;align-items:center;justify-content:space-between;-webkit-app-region:drag;color:#777;font-size:8px}
-#titlebar .buttons{display:flex;gap:3px;-webkit-app-region:no-drag}
-.winbtn{width:18px;height:13px;border:0;border-radius:3px;background:#303038;color:#aaa;font-size:8px;line-height:13px;padding:0;cursor:pointer}
-.winbtn:hover{background:#4a4a55;color:#fff}
-#timerBar{display:flex;gap:3px;padding:3px;border:1px solid rgba(255,255,255,.18);border-radius:7px;background:rgba(20,20,25,.94)}
-.timer{width:86px;height:66px;padding:0;border:1px solid rgba(255,255,255,.15);border-radius:5px;background:rgba(45,45,52,.96);color:#fff;cursor:pointer;overflow:hidden}
-.timer:hover{border-color:rgba(255,255,255,.55)}
-.timer:active{transform:translateY(1px)}
-.job{display:flex;align-items:center;justify-content:center;height:22px;font-size:11px;font-weight:700;letter-spacing:.8px;color:rgba(255,255,255,.68);background:rgba(0,0,0,.18)}
-.separator{height:1px;background:rgba(255,255,255,.13)}
-.time{display:flex;align-items:center;justify-content:center;height:42px;font-size:20px;font-weight:900;font-variant-numeric:tabular-nums}
-.timer.ready{background:rgba(45,45,52,.96)}
-.timer.ready .time{font-size:16px;color:rgba(255,255,255,.9)}
-.timer.warning{background:rgba(126,99,0,.97)}
-.timer.danger{background:rgba(155,35,40,.98)}
-#guardianBar{display:flex;align-items:center;gap:5px}
-.guardianTimer{width:126px;height:42px;padding:0;border:1px solid rgba(255,255,255,.22);border-radius:5px;background:rgba(55,45,38,.96);color:#fff;cursor:pointer;display:grid;grid-template-columns:64px 1px 61px;align-items:center}
-.guardianTimer:hover{border-color:rgba(255,255,255,.6)}
-.guardianTimer:active{transform:translateY(1px)}
-.guardianLabel{font-size:10px;font-weight:800;letter-spacing:.5px;color:rgba(255,255,255,.72)}
-.guardianSeparator{width:1px;height:24px;background:rgba(255,255,255,.14)}
-.guardianTime{font-size:15px;font-weight:900;font-variant-numeric:tabular-nums}
-.guardianTimer.ready{background:rgba(45,45,52,.96)}
-.guardianTimer.warning{background:rgba(126,99,0,.97)}
-.guardianTimer.danger{background:rgba(155,35,40,.98)}
-.guardianHint{font-size:9px;color:#777}
-#controls{display:flex;justify-content:space-between;align-items:center;gap:5px}
-#hint{font-size:9px;color:#999}
-.control{border:1px solid #666;background:#29292f;color:#eee;border-radius:4px;padding:4px 7px;cursor:pointer;font-size:10px}
-.control:hover{background:#3b3b43}
-#settings{display:none;padding:7px;border:1px solid #555;border-radius:6px;background:rgba(30,30,35,.99);max-height:300px;overflow:auto}
-#settings.open{display:block}
-.note{font-size:9px;color:#999;margin:0 0 6px;line-height:1.35}
-.setting{display:grid;grid-template-columns:16px 1fr;align-items:center;gap:6px;margin-bottom:5px}
-.jobSelect{width:100%;background:#17171b;color:#fff;border:1px solid #666;border-radius:4px;padding:5px}
-.actions{display:flex;gap:5px;margin-top:6px}
+
+html,body{
+  margin:0;
+  padding:0;
+  background:transparent
+}
+
+body{
+  color:#fff;
+  font-family:"Segoe UI",Arial,sans-serif;
+  user-select:none;
+  overflow:hidden
+}
+
+#app{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  padding:5px
+}
+
+#titlebar{
+  height:15px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  -webkit-app-region:drag;
+  color:#777;
+  font-size:8px
+}
+
+#titlebar .buttons{
+  display:flex;
+  gap:3px;
+  -webkit-app-region:no-drag
+}
+
+.winbtn{
+  width:18px;
+  height:13px;
+  border:0;
+  border-radius:3px;
+  background:#303038;
+  color:#aaa;
+  font-size:8px;
+  line-height:13px;
+  padding:0;
+  cursor:pointer
+}
+
+.winbtn:hover{
+  background:#4a4a55;
+  color:#fff
+}
+
+#timerBar{
+  display:flex;
+  gap:3px;
+  padding:3px;
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:7px;
+  background:rgba(20,20,25,.94)
+}
+
+.timer{
+  width:86px;
+  height:66px;
+  padding:0;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:5px;
+  background:rgba(45,45,52,.96);
+  color:#fff;
+  cursor:pointer;
+  overflow:hidden
+}
+
+.timer:hover{
+  border-color:rgba(255,255,255,.55)
+}
+
+.timer:active{
+  transform:translateY(1px)
+}
+
+/* ジョブ表示 */
+.job{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  height:22px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.8px;
+  color:rgba(255,255,255,.9);
+  background:rgba(0,0,0,.18)
+}
+
+/* ジョブアイコン */
+.jobIcon{
+  width:17px;
+  height:17px;
+  object-fit:contain;
+  display:block;
+  flex-shrink:0
+}
+
+/* ジョブ略称 */
+.jobAbbr{
+  line-height:1
+}
+
+.separator{
+  height:1px;
+  background:rgba(255,255,255,.13)
+}
+
+.time{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:42px;
+  font-size:20px;
+  font-weight:900;
+  font-variant-numeric:tabular-nums
+}
+
+.timer.ready{
+  background:rgba(45,45,52,.96)
+}
+
+.timer.ready .time{
+  font-size:16px;
+  color:rgba(255,255,255,.9)
+}
+
+.timer.warning{
+  background:rgba(126,99,0,.97)
+}
+
+.timer.danger{
+  background:rgba(155,35,40,.98)
+}
+
+/* ガーディアン */
+#guardianBar{
+  display:flex;
+  align-items:center;
+  gap:5px
+}
+
+.guardianTimer{
+  width:126px;
+  height:42px;
+  padding:0;
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:5px;
+  background:rgba(55,45,38,.96);
+  color:#fff;
+  cursor:pointer;
+  display:grid;
+  grid-template-columns:64px 1px 61px;
+  align-items:center
+}
+
+.guardianTimer:hover{
+  border-color:rgba(255,255,255,.6)
+}
+
+.guardianTimer:active{
+  transform:translateY(1px)
+}
+
+.guardianLabel{
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.5px;
+  color:rgba(255,255,255,.72)
+}
+
+.guardianSeparator{
+  width:1px;
+  height:24px;
+  background:rgba(255,255,255,.14)
+}
+
+.guardianTime{
+  font-size:15px;
+  font-weight:900;
+  font-variant-numeric:tabular-nums
+}
+
+.guardianTimer.ready{
+  background:rgba(45,45,52,.96)
+}
+
+.guardianTimer.warning{
+  background:rgba(126,99,0,.97)
+}
+
+.guardianTimer.danger{
+  background:rgba(155,35,40,.98)
+}
+
+.guardianHint{
+  font-size:9px;
+  color:#777
+}
+
+#controls{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:5px
+}
+
+#hint{
+  font-size:9px;
+  color:#999
+}
+
+.control{
+  border:1px solid #666;
+  background:#29292f;
+  color:#eee;
+  border-radius:4px;
+  padding:4px 7px;
+  cursor:pointer;
+  font-size:10px
+}
+
+.control:hover{
+  background:#3b3b43
+}
+
+#settings{
+  display:none;
+  padding:7px;
+  border:1px solid #555;
+  border-radius:6px;
+  background:rgba(30,30,35,.99);
+  max-height:300px;
+  overflow:auto
+}
+
+#settings.open{
+  display:block
+}
+
+.note{
+  font-size:9px;
+  color:#999;
+  margin:0 0 6px;
+  line-height:1.35
+}
+
+.setting{
+  display:grid;
+  grid-template-columns:16px 1fr;
+  align-items:center;
+  gap:6px;
+  margin-bottom:5px
+}
+
+.jobSelect{
+  width:100%;
+  background:#17171b;
+  color:#fff;
+  border:1px solid #666;
+  border-radius:4px;
+  padding:5px
+}
+
+.actions{
+  display:flex;
+  gap:5px;
+  margin-top:6px
+}
 </style>
 </head>
+
 <body>
+
 <div id="app">
+
   <div id="titlebar">
     <span>FF14 Defense Timer</span>
+
     <span class="buttons">
       <button class="winbtn" id="minimize">−</button>
       <button class="winbtn" id="close">×</button>
@@ -60,124 +304,660 @@ body{color:#fff;font-family:"Segoe UI",Arial,sans-serif;user-select:none;overflo
   <div id="timerBar"></div>
 
   <div id="guardianBar">
-    <button class="guardianTimer ready" id="guardianTimer" title="ナイト：ガーディアン">
+
+    <button
+      class="guardianTimer ready"
+      id="guardianTimer"
+      title="ナイト：ガーディアン"
+    >
       <span class="guardianLabel">GUARDIAN</span>
       <span class="guardianSeparator"></span>
       <span class="guardianTime">READY</span>
     </button>
+
     <span class="guardianHint">Gキー / クリック</span>
+
   </div>
 
   <div id="controls">
-    <span id="hint">1～5：開始 / もう一度：リセット</span>
-    <button class="control" id="settingsButton">ジョブ設定</button>
+
+    <span id="hint">
+      1～5：開始 / もう一度：リセット
+    </span>
+
+    <button class="control" id="settingsButton">
+      ジョブ設定
+    </button>
+
   </div>
 
   <div id="settings">
-    <div class="note">各スロットのジョブを選択。設定はこのPCに保存されます。</div>
-    <div id="jobSettings"></div>
-    <div class="actions">
-      <button class="control" id="resetAll">全READY</button>
-      <button class="control" id="closeSettings">閉じる</button>
+
+    <div class="note">
+      各スロットのジョブを選択。設定はこのPCに保存されます。
     </div>
+
+    <div id="jobSettings"></div>
+
+    <div class="actions">
+      <button class="control" id="resetAll">
+        全READY
+      </button>
+
+      <button class="control" id="closeSettings">
+        閉じる
+      </button>
+    </div>
+
   </div>
+
 </div>
 
 <script>
+
+/* ========================================
+   ジョブ一覧
+======================================== */
+
 const JOBS=[
-{abbr:"PLD",name:"ナイト"},{abbr:"WAR",name:"戦士"},{abbr:"DRK",name:"暗黒騎士"},{abbr:"GNB",name:"ガンブレイカー"},
-{abbr:"WHM",name:"白魔道士"},{abbr:"SCH",name:"学者"},{abbr:"AST",name:"占星術師"},{abbr:"SGE",name:"賢者"},
-{abbr:"MNK",name:"モンク"},{abbr:"DRG",name:"竜騎士"},{abbr:"NIN",name:"忍者"},{abbr:"SAM",name:"侍"},
-{abbr:"RPR",name:"リーパー"},{abbr:"VPR",name:"ヴァイパー"},{abbr:"BRD",name:"吟遊詩人"},{abbr:"MCH",name:"機工士"},
-{abbr:"DNC",name:"踊り子"},{abbr:"BLM",name:"黒魔道士"},{abbr:"SMN",name:"召喚士"},{abbr:"RDM",name:"赤魔道士"},
-{abbr:"PCT",name:"ピクトマンサー"},{abbr:"BLU",name:"青魔道士"}
+
+  {abbr:"PLD",name:"ナイト",icon:"PLD.png"},
+  {abbr:"WAR",name:"戦士",icon:"WAR.png"},
+  {abbr:"DRK",name:"暗黒騎士",icon:"DRK.png"},
+  {abbr:"GNB",name:"ガンブレイカー",icon:"GNB.png"},
+
+  {abbr:"WHM",name:"白魔道士",icon:"WHM.png"},
+  {abbr:"SCH",name:"学者",icon:"SCH.png"},
+  {abbr:"AST",name:"占星術師",icon:"AST.png"},
+  {abbr:"SGE",name:"賢者",icon:"SGE.png"},
+
+  {abbr:"MNK",name:"モンク",icon:"MNK.png"},
+  {abbr:"DRG",name:"竜騎士",icon:"DRG.png"},
+  {abbr:"NIN",name:"忍者",icon:"NIN.png"},
+  {abbr:"SAM",name:"侍",icon:"SAM.png"},
+  {abbr:"RPR",name:"リーパー",icon:"RPR.png"},
+  {abbr:"VPR",name:"ヴァイパー",icon:"VPR.png"},
+
+  {abbr:"BRD",name:"吟遊詩人",icon:"BRD.png"},
+  {abbr:"MCH",name:"機工士",icon:"MCH.png"},
+  {abbr:"DNC",name:"踊り子",icon:"DNC.png"},
+
+  {abbr:"BLM",name:"黒魔道士",icon:"BLM.png"},
+  {abbr:"SMN",name:"召喚士",icon:"SMN.png"},
+  {abbr:"RDM",name:"赤魔道士",icon:"RDM.png"},
+  {abbr:"PCT",name:"ピクトマンサー",icon:"PCT.png"},
+  {abbr:"BLU",name:"青魔道士",icon:"BLU.png"}
+
 ];
+
+
+/* ========================================
+   基本設定
+======================================== */
 
 const KEY="ff14-defense-jobs-app-v1";
 const COOLDOWN=30;
+
 let selected=load();
-const timers=[null,null,null,null,null];
+
+const timers=[
+  null,
+  null,
+  null,
+  null,
+  null
+];
+
 let guardianTimer=null;
 
-function load(){
- try{
-  const x=JSON.parse(localStorage.getItem(KEY));
-  if(Array.isArray(x)&&x.length===5&&x.every(n=>Number.isInteger(n)&&n>=0&&n<JOBS.length))return x;
- }catch(e){}
- return [1,2,3,0,4];
-}
-function save(){localStorage.setItem(KEY,JSON.stringify(selected));}
 
-const bar=document.getElementById("timerBar");
-const buttons=[];
-for(let i=0;i<5;i++){
- const b=document.createElement("button");
- b.className="timer ready";
- b.innerHTML='<span class="job"></span><span class="separator"></span><span class="time">READY</span>';
- b.onclick=()=>toggleTimer(i);
- bar.appendChild(b);buttons.push(b);
+/* ========================================
+   保存・読み込み
+======================================== */
+
+function load(){
+
+  try{
+
+    const x=
+      JSON.parse(
+        localStorage.getItem(KEY)
+      );
+
+    if(
+      Array.isArray(x)&&
+      x.length===5&&
+      x.every(
+        n=>
+          Number.isInteger(n)&&
+          n>=0&&
+          n<JOBS.length
+      )
+    ){
+      return x;
+    }
+
+  }catch(e){}
+
+  return [
+    1,
+    2,
+    3,
+    0,
+    4
+  ];
 }
-const guardianButton=document.getElementById("guardianTimer");
+
+
+function save(){
+
+  localStorage.setItem(
+    KEY,
+    JSON.stringify(selected)
+  );
+
+}
+
+
+/* ========================================
+   タイマーボタン生成
+======================================== */
+
+const bar=
+  document.getElementById(
+    "timerBar"
+  );
+
+const buttons=[];
+
+
+for(let i=0;i<5;i++){
+
+  const b=
+    document.createElement(
+      "button"
+    );
+
+  b.className=
+    "timer ready";
+
+  b.innerHTML=`
+    <span class="job">
+      <img class="jobIcon" alt="">
+      <span class="jobAbbr"></span>
+    </span>
+
+    <span class="separator"></span>
+
+    <span class="time">
+      READY
+    </span>
+  `;
+
+  b.onclick=
+    ()=>toggleTimer(i);
+
+  bar.appendChild(b);
+
+  buttons.push(b);
+
+}
+
+
+/* ========================================
+   ガーディアン
+======================================== */
+
+const guardianButton=
+  document.getElementById(
+    "guardianTimer"
+  );
+
+
+/* ========================================
+   表示更新
+======================================== */
 
 function render(){
- for(let i=0;i<5;i++){
-  buttons[i].querySelector(".job").textContent=JOBS[selected[i]].abbr;
-  buttons[i].title=`${JOBS[selected[i]].name} (${JOBS[selected[i]].abbr})`;
- }
- renderSettings();
-}
-function renderSettings(){
- const box=document.getElementById("jobSettings");box.innerHTML="";
- for(let i=0;i<5;i++){
-  const row=document.createElement("div");row.className="setting";
-  const n=document.createElement("strong");n.textContent=i+1;
-  const select=document.createElement("select");select.className="jobSelect";
-  JOBS.forEach((job,index)=>{
-   const o=document.createElement("option");o.value=index;o.textContent=`${job.abbr} — ${job.name}`;o.selected=index===selected[i];select.appendChild(o);
-  });
-  select.onchange=()=>{selected[i]=Number(select.value);save();render();};
-  row.append(n,select);box.appendChild(row);
- }
-}
-function toggleTimer(i){timers[i]=timers[i]===null?performance.now()+COOLDOWN*1000:null;updateTimer(i);}
-function updateTimer(i){
- const b=buttons[i],t=b.querySelector(".time");
- b.classList.remove("ready","warning","danger");
- if(timers[i]===null){b.classList.add("ready");t.textContent="READY";return;}
- const r=Math.max(0,(timers[i]-performance.now())/1000);
- if(r<=0){timers[i]=null;b.classList.add("ready");t.textContent="READY";return;}
- t.textContent=r.toFixed(1)+"s";
- if(r<=5)b.classList.add("danger");else if(r<=10)b.classList.add("warning");
-}
-function toggleGuardian(){guardianTimer=guardianTimer===null?performance.now()+COOLDOWN*1000:null;updateGuardian();}
-function updateGuardian(){
- const t=guardianButton.querySelector(".guardianTime");
- guardianButton.classList.remove("ready","warning","danger");
- if(guardianTimer===null){guardianButton.classList.add("ready");t.textContent="READY";return;}
- const r=Math.max(0,(guardianTimer-performance.now())/1000);
- if(r<=0){guardianTimer=null;guardianButton.classList.add("ready");t.textContent="READY";return;}
- t.textContent=r.toFixed(1)+"s";
- if(r<=5)guardianButton.classList.add("danger");else if(r<=10)guardianButton.classList.add("warning");
-}
-guardianButton.onclick=toggleGuardian;
 
-document.addEventListener("keydown",e=>{
- if(e.target.tagName==="SELECT"||e.target.tagName==="INPUT")return;
- if(/^[1-5]$/.test(e.key)){e.preventDefault();toggleTimer(Number(e.key)-1);}
- if(e.key.toLowerCase()==="g"){e.preventDefault();toggleGuardian();}
-});
-document.getElementById("settingsButton").onclick=()=>document.getElementById("settings").classList.toggle("open");
-document.getElementById("closeSettings").onclick=()=>document.getElementById("settings").classList.remove("open");
-document.getElementById("resetAll").onclick=()=>{for(let i=0;i<5;i++)timers[i]=null;guardianTimer=null;};
+  for(let i=0;i<5;i++){
+
+    const job=
+      JOBS[selected[i]];
+
+    const icon=
+      buttons[i].querySelector(
+        ".jobIcon"
+      );
+
+    const abbr=
+      buttons[i].querySelector(
+        ".jobAbbr"
+      );
+
+    icon.src=
+      "icons/"+job.icon;
+
+    icon.alt=
+      job.abbr;
+
+    abbr.textContent=
+      job.abbr;
+
+    buttons[i].title=
+      `${job.name} (${job.abbr})`;
+
+  }
+
+  renderSettings();
+
+}
+
+
+/* ========================================
+   ジョブ設定
+======================================== */
+
+function renderSettings(){
+
+  const box=
+    document.getElementById(
+      "jobSettings"
+    );
+
+  box.innerHTML="";
+
+  for(let i=0;i<5;i++){
+
+    const row=
+      document.createElement(
+        "div"
+      );
+
+    row.className=
+      "setting";
+
+    const n=
+      document.createElement(
+        "strong"
+      );
+
+    n.textContent=
+      i+1;
+
+    const select=
+      document.createElement(
+        "select"
+      );
+
+    select.className=
+      "jobSelect";
+
+    JOBS.forEach(
+      (job,index)=>{
+
+        const o=
+          document.createElement(
+            "option"
+          );
+
+        o.value=
+          index;
+
+        o.textContent=
+          `${job.abbr} — ${job.name}`;
+
+        o.selected=
+          index===selected[i];
+
+        select.appendChild(o);
+
+      }
+    );
+
+    select.onchange=()=>{
+
+      selected[i]=
+        Number(
+          select.value
+        );
+
+      save();
+
+      render();
+
+    };
+
+    row.append(
+      n,
+      select
+    );
+
+    box.appendChild(row);
+
+  }
+
+}
+
+
+/* ========================================
+   防御タイマー
+======================================== */
+
+function toggleTimer(i){
+
+  timers[i]=
+    timers[i]===null
+      ? performance.now()+COOLDOWN*1000
+      : null;
+
+  updateTimer(i);
+
+}
+
+
+function updateTimer(i){
+
+  const b=
+    buttons[i];
+
+  const t=
+    b.querySelector(
+      ".time"
+    );
+
+  b.classList.remove(
+    "ready",
+    "warning",
+    "danger"
+  );
+
+  if(
+    timers[i]===null
+  ){
+
+    b.classList.add(
+      "ready"
+    );
+
+    t.textContent=
+      "READY";
+
+    return;
+
+  }
+
+  const r=
+    Math.max(
+      0,
+      (timers[i]-performance.now())/1000
+    );
+
+  if(r<=0){
+
+    timers[i]=null;
+
+    b.classList.add(
+      "ready"
+    );
+
+    t.textContent=
+      "READY";
+
+    return;
+
+  }
+
+  t.textContent=
+    r.toFixed(1)+"s";
+
+  if(r<=5){
+
+    b.classList.add(
+      "danger"
+    );
+
+  }else if(r<=10){
+
+    b.classList.add(
+      "warning"
+    );
+
+  }
+
+}
+
+
+/* ========================================
+   ガーディアンタイマー
+======================================== */
+
+function toggleGuardian(){
+
+  guardianTimer=
+    guardianTimer===null
+      ? performance.now()+COOLDOWN*1000
+      : null;
+
+  updateGuardian();
+
+}
+
+
+function updateGuardian(){
+
+  const t=
+    guardianButton.querySelector(
+      ".guardianTime"
+    );
+
+  guardianButton.classList.remove(
+    "ready",
+    "warning",
+    "danger"
+  );
+
+  if(
+    guardianTimer===null
+  ){
+
+    guardianButton.classList.add(
+      "ready"
+    );
+
+    t.textContent=
+      "READY";
+
+    return;
+
+  }
+
+  const r=
+    Math.max(
+      0,
+      (guardianTimer-performance.now())/1000
+    );
+
+  if(r<=0){
+
+    guardianTimer=null;
+
+    guardianButton.classList.add(
+      "ready"
+    );
+
+    t.textContent=
+      "READY";
+
+    return;
+
+  }
+
+  t.textContent=
+    r.toFixed(1)+"s";
+
+  if(r<=5){
+
+    guardianButton.classList.add(
+      "danger"
+    );
+
+  }else if(r<=10){
+
+    guardianButton.classList.add(
+      "warning"
+    );
+
+  }
+
+}
+
+
+guardianButton.onclick=
+  toggleGuardian;
+
+
+/* ========================================
+   キーボード操作
+======================================== */
+
+document.addEventListener(
+  "keydown",
+  e=>{
+
+    if(
+      e.target.tagName==="SELECT"||
+      e.target.tagName==="INPUT"
+    ){
+      return;
+    }
+
+    if(
+      /^[1-5]$/.test(e.key)
+    ){
+
+      e.preventDefault();
+
+      toggleTimer(
+        Number(e.key)-1
+      );
+
+    }
+
+    if(
+      e.key.toLowerCase()==="g"
+    ){
+
+      e.preventDefault();
+
+      toggleGuardian();
+
+    }
+
+  }
+);
+
+
+/* ========================================
+   設定ボタン
+======================================== */
+
+document.getElementById(
+  "settingsButton"
+).onclick=()=>{
+
+  document.getElementById(
+    "settings"
+  ).classList.toggle(
+    "open"
+  );
+
+};
+
+
+document.getElementById(
+  "closeSettings"
+).onclick=()=>{
+
+  document.getElementById(
+    "settings"
+  ).classList.remove(
+    "open"
+  );
+
+};
+
+
+/* ========================================
+   全READY
+======================================== */
+
+document.getElementById(
+  "resetAll"
+).onclick=()=>{
+
+  for(let i=0;i<5;i++){
+
+    timers[i]=null;
+
+  }
+
+  guardianTimer=null;
+
+};
+
+
+/* ========================================
+   Electron版対応
+======================================== */
 
 if(window.ff14App){
- document.getElementById("close").onclick=()=>window.ff14App.close();
- document.getElementById("minimize").onclick=()=>window.ff14App.minimize();
+
+  document.getElementById(
+    "close"
+  ).onclick=
+    ()=>window.ff14App.close();
+
+  document.getElementById(
+    "minimize"
+  ).onclick=
+    ()=>window.ff14App.minimize();
+
 }
 
-function loop(){for(let i=0;i<5;i++)updateTimer(i);updateGuardian();requestAnimationFrame(loop);}
+
+/* ========================================
+   メインループ
+======================================== */
+
+function loop(){
+
+  for(let i=0;i<5;i++){
+
+    updateTimer(i);
+
+  }
+
+  updateGuardian();
+
+  requestAnimationFrame(
+    loop
+  );
+
+}
+
+
+/* ========================================
+   起動
+======================================== */
+
 render();
-requestAnimationFrame(loop);
+
+requestAnimationFrame(
+  loop
+);
+
 </script>
+
 </body>
 </html>
