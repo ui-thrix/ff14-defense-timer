@@ -7,27 +7,27 @@
 
 <style>
 *{
-  box-sizing:border-box
+  box-sizing:border-box;
 }
 
 html,body{
   margin:0;
   padding:0;
-  background:transparent
+  background:transparent;
 }
 
 body{
   color:#fff;
   font-family:"Segoe UI",Arial,sans-serif;
   user-select:none;
-  overflow:hidden
+  overflow:hidden;
 }
 
 #app{
   display:flex;
   flex-direction:column;
   gap:4px;
-  padding:5px
+  padding:5px;
 }
 
 
@@ -42,13 +42,13 @@ body{
   justify-content:space-between;
   -webkit-app-region:drag;
   color:#777;
-  font-size:8px
+  font-size:8px;
 }
 
 #titlebar .buttons{
   display:flex;
   gap:3px;
-  -webkit-app-region:no-drag
+  -webkit-app-region:no-drag;
 }
 
 .winbtn{
@@ -61,12 +61,12 @@ body{
   font-size:8px;
   line-height:13px;
   padding:0;
-  cursor:pointer
+  cursor:pointer;
 }
 
 .winbtn:hover{
   background:#4a4a55;
-  color:#fff
+  color:#fff;
 }
 
 
@@ -80,7 +80,7 @@ body{
   padding:3px;
   border:1px solid rgba(255,255,255,.18);
   border-radius:7px;
-  background:rgba(20,20,25,.94)
+  background:rgba(20,20,25,.94);
 }
 
 
@@ -90,99 +90,110 @@ body{
 
 .timer{
   width:86px;
-  height:66px;
+  height:72px;
   padding:0;
   border:1px solid rgba(255,255,255,.15);
   border-radius:5px;
   background:rgba(45,45,52,.96);
   color:#fff;
   cursor:pointer;
-  overflow:hidden
+  overflow:hidden;
+
+  display:grid;
+  grid-template-rows:30px 1px 41px;
+  align-items:center;
 }
 
 .timer:hover{
-  border-color:rgba(255,255,255,.55)
+  border-color:rgba(255,255,255,.55);
 }
 
 .timer:active{
-  transform:translateY(1px)
+  transform:translateY(1px);
 }
 
 
-/* ジョブ表示 */
+/* ========================================
+   ジョブアイコン
+======================================== */
 
 .job{
+  height:30px;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:5px;
-  height:22px;
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.8px;
-  color:rgba(255,255,255,.9);
-  background:rgba(0,0,0,.18)
+
+  background:rgba(0,0,0,.18);
 }
 
-
-/* ジョブアイコン */
 
 .jobIcon{
-  width:17px;
-  height:17px;
+  width:26px;
+  height:26px;
+
   object-fit:contain;
   display:block;
-  flex-shrink:0
 }
 
 
-/* ジョブ略称 */
-
-.jobAbbr{
-  line-height:1
-}
-
+/* ========================================
+   区切り線
+======================================== */
 
 .separator{
   height:1px;
-  background:rgba(255,255,255,.13)
+  background:rgba(255,255,255,.13);
 }
 
+
+/* ========================================
+   タイマー数字
+======================================== */
 
 .time{
   display:flex;
   align-items:center;
   justify-content:center;
-  height:42px;
+
+  height:41px;
+
   font-size:20px;
   font-weight:900;
-  font-variant-numeric:tabular-nums
+
+  font-variant-numeric:tabular-nums;
 }
 
 
-/* READY */
+/* ========================================
+   READY
+======================================== */
 
 .timer.ready{
-  background:rgba(45,45,52,.96)
+  background:rgba(45,45,52,.96);
 }
 
 .timer.ready .time{
   font-size:16px;
-  color:rgba(255,255,255,.9)
+  color:rgba(255,255,255,.9);
 }
 
 
-/* 残り10秒以下 */
+/* ========================================
+   残り10秒以下
+======================================== */
 
 .timer.warning{
-  background:rgba(126,99,0,.97)
+  background:rgba(126,99,0,.97);
 }
 
 
-/* 残り5秒以下 */
+/* ========================================
+   残り5秒以下
+======================================== */
 
 .timer.danger{
-  background:rgba(155,35,40,.98)
+  background:rgba(155,35,40,.98);
 }
 
 
@@ -192,131 +203,157 @@ body{
 
 #guardianBar{
   display:flex;
-  align-items:center
+  align-items:center;
 }
 
 
 .guardianTimer{
   width:86px;
-  height:66px;
+  height:72px;
   padding:0;
+
   border:1px solid rgba(255,255,255,.22);
   border-radius:5px;
+
   background:rgba(55,45,38,.96);
   color:#fff;
+
   cursor:pointer;
   overflow:hidden;
 
   display:grid;
-  grid-template-rows:22px 1px 42px;
-  align-items:center
+  grid-template-rows:30px 1px 41px;
+  align-items:center;
 }
+
 
 .guardianTimer:hover{
-  border-color:rgba(255,255,255,.6)
+  border-color:rgba(255,255,255,.6);
 }
+
 
 .guardianTimer:active{
-  transform:translateY(1px)
+  transform:translateY(1px);
 }
 
 
-/* ガーディアンアイコン部分 */
+/* ========================================
+   ガーディアンアイコン
+======================================== */
 
 .guardianJob{
-  height:22px;
+  height:30px;
+
   display:flex;
   align-items:center;
   justify-content:center;
-  background:rgba(0,0,0,.18)
+
+  background:rgba(0,0,0,.18);
 }
 
 
 .guardianIcon{
-  width:17px;
-  height:17px;
+  width:26px;
+  height:26px;
+
   object-fit:contain;
-  display:block
+  display:block;
 }
 
 
-/* 区切り線 */
+/* ========================================
+   ガーディアン区切り線
+======================================== */
 
 .guardianSeparator{
   width:100%;
   height:1px;
-  background:rgba(255,255,255,.14)
+  background:rgba(255,255,255,.14);
 }
 
 
-/* ガーディアン時間 */
+/* ========================================
+   ガーディアン時間
+======================================== */
 
 .guardianTime{
   display:flex;
   align-items:center;
   justify-content:center;
-  height:42px;
+
+  height:41px;
 
   font-size:20px;
   font-weight:900;
-  font-variant-numeric:tabular-nums
-}
 
-
-/* ガーディアン READY */
-
-.guardianTimer.ready{
-  background:rgba(45,45,52,.96)
-}
-
-.guardianTimer.ready .guardianTime{
-  font-size:16px;
-  color:rgba(255,255,255,.9)
-}
-
-
-/* ガーディアン 残り10秒以下 */
-
-.guardianTimer.warning{
-  background:rgba(126,99,0,.97)
-}
-
-
-/* ガーディアン 残り5秒以下 */
-
-.guardianTimer.danger{
-  background:rgba(155,35,40,.98)
+  font-variant-numeric:tabular-nums;
 }
 
 
 /* ========================================
-   コントロール
+   ガーディアン READY
+======================================== */
+
+.guardianTimer.ready{
+  background:rgba(45,45,52,.96);
+}
+
+
+.guardianTimer.ready .guardianTime{
+  font-size:16px;
+  color:rgba(255,255,255,.9);
+}
+
+
+/* ========================================
+   ガーディアン警告
+======================================== */
+
+.guardianTimer.warning{
+  background:rgba(126,99,0,.97);
+}
+
+
+.guardianTimer.danger{
+  background:rgba(155,35,40,.98);
+}
+
+
+/* ========================================
+   操作部分
 ======================================== */
 
 #controls{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:5px
+  gap:5px;
 }
+
 
 #hint{
   font-size:9px;
-  color:#999
+  color:#999;
 }
+
 
 .control{
   border:1px solid #666;
   background:#29292f;
   color:#eee;
+
   border-radius:4px;
+
   padding:4px 7px;
+
   cursor:pointer;
-  font-size:10px
+
+  font-size:10px;
 }
 
+
 .control:hover{
-  background:#3b3b43
+  background:#3b3b43;
 }
 
 
@@ -326,46 +363,68 @@ body{
 
 #settings{
   display:none;
+
   padding:7px;
+
   border:1px solid #555;
   border-radius:6px;
+
   background:rgba(30,30,35,.99);
+
   max-height:300px;
-  overflow:auto
+
+  overflow:auto;
 }
 
+
 #settings.open{
-  display:block
+  display:block;
 }
+
 
 .note{
   font-size:9px;
   color:#999;
+
   margin:0 0 6px;
-  line-height:1.35
+
+  line-height:1.35;
 }
+
 
 .setting{
   display:grid;
+
   grid-template-columns:16px 1fr;
+
   align-items:center;
+
   gap:6px;
-  margin-bottom:5px
+
+  margin-bottom:5px;
 }
+
 
 .jobSelect{
   width:100%;
+
   background:#17171b;
   color:#fff;
+
   border:1px solid #666;
+
   border-radius:4px;
-  padding:5px
+
+  padding:5px;
 }
+
 
 .actions{
   display:flex;
+
   gap:5px;
-  margin-top:6px
+
+  margin-top:6px;
 }
 
 </style>
@@ -790,8 +849,6 @@ for(
         alt=""
       >
 
-      <span class="jobAbbr"></span>
-
     </span>
 
     <span class="separator"></span>
@@ -826,7 +883,7 @@ const guardianButton=
 
 
 /* ========================================
-   ジョブ表示更新
+   ジョブアイコン表示
 ======================================== */
 
 function render(){
@@ -851,21 +908,11 @@ function render(){
       );
 
 
-    const abbr=
-      buttons[i].querySelector(
-        ".jobAbbr"
-      );
-
-
     icon.src=
       "icons/"+job.icon;
 
 
     icon.alt=
-      job.abbr;
-
-
-    abbr.textContent=
       job.abbr;
 
 
@@ -881,7 +928,7 @@ function render(){
 
 
 /* ========================================
-   ジョブ設定画面
+   ジョブ設定
 ======================================== */
 
 function renderSettings(){
@@ -957,7 +1004,9 @@ function renderSettings(){
           index===selected[i];
 
 
-        select.appendChild(o);
+        select.appendChild(
+          o
+        );
 
       }
 
@@ -996,7 +1045,7 @@ function renderSettings(){
 
 
 /* ========================================
-   通常タイマー開始 / リセット
+   防御タイマー開始 / リセット
 ======================================== */
 
 function toggleTimer(i){
@@ -1017,7 +1066,7 @@ function toggleTimer(i){
 
 
 /* ========================================
-   通常タイマー更新
+   防御タイマー更新
 ======================================== */
 
 function updateTimer(i){
@@ -1291,7 +1340,7 @@ document.addEventListener(
     }
 
 
-    /* 1～5 */
+    /* 1～5キー */
 
     if(
 
