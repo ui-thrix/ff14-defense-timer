@@ -92,10 +92,13 @@ body{
   width:86px;
   height:72px;
   padding:0;
+
   border:1px solid rgba(255,255,255,.15);
   border-radius:5px;
+
   background:rgba(45,45,52,.96);
   color:#fff;
+
   cursor:pointer;
   overflow:hidden;
 
@@ -179,7 +182,20 @@ body{
 
 
 /* ========================================
-   27秒モード
+   タイマー警告
+======================================== */
+
+.timer.warning{
+  background:rgba(126,99,0,.97);
+}
+
+.timer.danger{
+  background:rgba(155,35,40,.98);
+}
+
+
+/* ========================================
+   遅延モード切替
 ======================================== */
 
 #modeControls{
@@ -190,6 +206,7 @@ body{
 
 #modeButton{
   width:100%;
+
   border:1px solid #666;
   background:#29292f;
   color:#eee;
@@ -207,9 +224,6 @@ body{
   background:#3b3b43;
 }
 
-
-/* 27秒モードON */
-
 #modeButton.active{
   background:rgba(126,99,0,.97);
   border-color:rgba(255,210,70,.7);
@@ -222,28 +236,21 @@ body{
 
 
 /* ========================================
-   タイマー警告
+   下段タイマー
 ======================================== */
 
-.timer.warning{
-  background:rgba(126,99,0,.97);
-}
-
-.timer.danger{
-  background:rgba(155,35,40,.98);
+#cooldownBar{
+  display:flex;
+  align-items:center;
+  gap:4px;
 }
 
 
 /* ========================================
-   ガーディアン
+   Guardian / Salted Earth
 ======================================== */
 
-#guardianBar{
-  display:flex;
-  align-items:center;
-}
-
-.guardianTimer{
+.specialTimer{
   width:86px;
   height:72px;
   padding:0;
@@ -251,7 +258,7 @@ body{
   border:1px solid rgba(255,255,255,.22);
   border-radius:5px;
 
-  background:rgba(55,45,38,.96);
+  background:rgba(45,45,52,.96);
   color:#fff;
 
   cursor:pointer;
@@ -262,20 +269,20 @@ body{
   align-items:center;
 }
 
-.guardianTimer:hover{
+.specialTimer:hover{
   border-color:rgba(255,255,255,.6);
 }
 
-.guardianTimer:active{
+.specialTimer:active{
   transform:translateY(1px);
 }
 
 
 /* ========================================
-   ガーディアンアイコン
+   下段アイコン
 ======================================== */
 
-.guardianJob{
+.specialJob{
   height:30px;
 
   display:flex;
@@ -285,7 +292,7 @@ body{
   background:rgba(0,0,0,.18);
 }
 
-.guardianIcon{
+.specialIcon{
   width:26px;
   height:26px;
 
@@ -295,10 +302,10 @@ body{
 
 
 /* ========================================
-   ガーディアン区切り線
+   下段区切り線
 ======================================== */
 
-.guardianSeparator{
+.specialSeparator{
   width:100%;
   height:1px;
   background:rgba(255,255,255,.14);
@@ -306,10 +313,10 @@ body{
 
 
 /* ========================================
-   ガーディアン時間
+   下段タイマー数字
 ======================================== */
 
-.guardianTime{
+.specialTime{
   display:flex;
   align-items:center;
   justify-content:center;
@@ -324,34 +331,34 @@ body{
 
 
 /* ========================================
-   ガーディアン READY
+   下段 READY
 ======================================== */
 
-.guardianTimer.ready{
+.specialTimer.ready{
   background:rgba(45,45,52,.96);
 }
 
-.guardianTimer.ready .guardianTime{
+.specialTimer.ready .specialTime{
   font-size:16px;
   color:rgba(255,255,255,.9);
 }
 
 
 /* ========================================
-   ガーディアン警告
+   下段警告
 ======================================== */
 
-.guardianTimer.warning{
+.specialTimer.warning{
   background:rgba(126,99,0,.97);
 }
 
-.guardianTimer.danger{
+.specialTimer.danger{
   background:rgba(155,35,40,.98);
 }
 
 
 /* ========================================
-   操作部分
+   操作
 ======================================== */
 
 #controls{
@@ -498,7 +505,7 @@ body{
 
 
   <!-- ========================================
-       27秒モード切替
+       遅延モード
   ======================================== -->
 
   <div id="modeControls">
@@ -507,41 +514,72 @@ body{
       id="modeButton"
       type="button"
     >
-      27秒モード：OFF
+      遅延モード：OFF
     </button>
 
   </div>
 
 
   <!-- ========================================
-       ガーディアン
+       Guardian / Salted Earth
   ======================================== -->
 
-  <div id="guardianBar">
+  <div id="cooldownBar">
+
+
+    <!-- Guardian -->
 
     <button
-      class="guardianTimer ready"
+      class="specialTimer ready"
       id="guardianTimer"
       title="ナイト：ガーディアン"
     >
 
-      <span class="guardianJob">
+      <span class="specialJob">
 
         <img
           src="icons/Guardian.png"
-          class="guardianIcon"
+          class="specialIcon"
           alt="Guardian"
         >
 
       </span>
 
-      <span class="guardianSeparator"></span>
+      <span class="specialSeparator"></span>
 
-      <span class="guardianTime">
+      <span class="specialTime">
         READY
       </span>
 
     </button>
+
+
+    <!-- Salted Earth -->
+
+    <button
+      class="specialTimer ready"
+      id="saltedEarthTimer"
+      title="ソルトアース"
+    >
+
+      <span class="specialJob">
+
+        <img
+          src="icons/Salted_Earth.png"
+          class="specialIcon"
+          alt="Salted Earth"
+        >
+
+      </span>
+
+      <span class="specialSeparator"></span>
+
+      <span class="specialTime">
+        READY
+      </span>
+
+    </button>
+
 
   </div>
 
@@ -553,7 +591,7 @@ body{
   <div id="controls">
 
     <span id="hint">
-      1～5：開始 / もう一度：リセット
+      1～5：開始　G：Guardian　S：Salted Earth
     </span>
 
     <button
@@ -747,27 +785,52 @@ const JOBS=[
 
 
 /* ========================================
-   基本設定
+   設定
 ======================================== */
 
 const KEY=
   "ff14-defense-jobs-app-v1";
 
-const NORMAL_COOLDOWN=
+
+/*
+  通常時
+
+  5枠       30秒
+  Guardian  30秒
+  Salted    28秒
+*/
+
+const NORMAL_MAIN=
   30;
 
-const DELAY_COOLDOWN=
+const NORMAL_GUARDIAN=
+  30;
+
+const NORMAL_SALTED=
+  28;
+
+
+/*
+  遅延モード
+
+  5枠       27秒
+  Guardian  27秒
+  Salted    25秒
+*/
+
+const DELAY_MAIN=
   27;
+
+const DELAY_GUARDIAN=
+  27;
+
+const DELAY_SALTED=
+  25;
 
 
 /* ========================================
    状態
 ======================================== */
-
-/*
-  false = 30秒
-  true  = 27秒
-*/
 
 let delayMode=
   false;
@@ -790,8 +853,12 @@ let guardianTimer=
   null;
 
 
+let saltedEarthTimer=
+  null;
+
+
 /* ========================================
-   設定読み込み
+   ジョブ設定読み込み
 ======================================== */
 
 function load(){
@@ -802,6 +869,7 @@ function load(){
       JSON.parse(
         localStorage.getItem(KEY)
       );
+
 
     if(
 
@@ -841,7 +909,7 @@ function load(){
 
 
 /* ========================================
-   設定保存
+   ジョブ設定保存
 ======================================== */
 
 function save(){
@@ -858,7 +926,7 @@ function save(){
 
 
 /* ========================================
-   タイマーボタン生成
+   5つのタイマー生成
 ======================================== */
 
 const bar=
@@ -923,7 +991,7 @@ for(
 
 
 /* ========================================
-   ガーディアン
+   特殊タイマー取得
 ======================================== */
 
 const guardianButton=
@@ -932,9 +1000,11 @@ const guardianButton=
   );
 
 
-/* ========================================
-   27秒モードボタン
-======================================== */
+const saltedEarthButton=
+  document.getElementById(
+    "saltedEarthTimer"
+  );
+
 
 const modeButton=
   document.getElementById(
@@ -990,7 +1060,7 @@ function render(){
 
 
 /* ========================================
-   ジョブ設定
+   ジョブ設定画面
 ======================================== */
 
 function renderSettings(){
@@ -1107,7 +1177,7 @@ function renderSettings(){
 
 
 /* ========================================
-   27秒モード表示更新
+   遅延モード表示
 ======================================== */
 
 function updateModeButton(){
@@ -1115,7 +1185,7 @@ function updateModeButton(){
   if(delayMode){
 
     modeButton.textContent=
-      "27秒モード：ON";
+      "遅延モード：ON";
 
     modeButton.classList.add(
       "active"
@@ -1124,7 +1194,7 @@ function updateModeButton(){
   }else{
 
     modeButton.textContent=
-      "27秒モード：OFF";
+      "遅延モード：OFF";
 
     modeButton.classList.remove(
       "active"
@@ -1136,7 +1206,7 @@ function updateModeButton(){
 
 
 /* ========================================
-   27秒モード切替
+   遅延モード切替
 ======================================== */
 
 modeButton.onclick=()=>{
@@ -1151,27 +1221,49 @@ modeButton.onclick=()=>{
 
 
 /* ========================================
-   現在の通常タイマー時間
+   5枠の現在のリキャスト
 ======================================== */
 
-function getCooldown(){
+function getMainCooldown(){
 
   return delayMode
-    ? DELAY_COOLDOWN
-    : NORMAL_COOLDOWN;
+    ? DELAY_MAIN
+    : NORMAL_MAIN;
 
 }
 
 
 /* ========================================
-   防御タイマー開始 / リセット
+   Guardianの現在のリキャスト
+======================================== */
+
+function getGuardianCooldown(){
+
+  return delayMode
+    ? DELAY_GUARDIAN
+    : NORMAL_GUARDIAN;
+
+}
+
+
+/* ========================================
+   Salted Earthの現在のリキャスト
+======================================== */
+
+function getSaltedEarthCooldown(){
+
+  return delayMode
+    ? DELAY_SALTED
+    : NORMAL_SALTED;
+
+}
+
+
+/* ========================================
+   5枠タイマー開始 / リセット
 ======================================== */
 
 function toggleTimer(i){
-
-  /*
-    READYなら現在のモードの秒数で開始
-  */
 
   if(
 
@@ -1183,13 +1275,9 @@ function toggleTimer(i){
 
       performance.now()
       +
-      getCooldown()*1000;
+      getMainCooldown()*1000;
 
   }
-
-  /*
-    カウント中ならリセット
-  */
 
   else{
 
@@ -1205,7 +1293,7 @@ function toggleTimer(i){
 
 
 /* ========================================
-   防御タイマー更新
+   5枠タイマー更新
 ======================================== */
 
 function updateTimer(i){
@@ -1330,7 +1418,7 @@ function toggleGuardian(){
 
       ? performance.now()
         +
-        NORMAL_COOLDOWN*1000
+        getGuardianCooldown()*1000
 
       : null;
 
@@ -1348,7 +1436,7 @@ function updateGuardian(){
 
   const t=
     guardianButton.querySelector(
-      ".guardianTime"
+      ".specialTime"
     );
 
 
@@ -1451,11 +1539,147 @@ function updateGuardian(){
 
 
 /* ========================================
-   Guardianクリック
+   Salted Earth開始 / リセット
+======================================== */
+
+function toggleSaltedEarth(){
+
+  saltedEarthTimer=
+
+    saltedEarthTimer===null
+
+      ? performance.now()
+        +
+        getSaltedEarthCooldown()*1000
+
+      : null;
+
+
+  updateSaltedEarth();
+
+}
+
+
+/* ========================================
+   Salted Earth更新
+======================================== */
+
+function updateSaltedEarth(){
+
+  const t=
+    saltedEarthButton.querySelector(
+      ".specialTime"
+    );
+
+
+  saltedEarthButton.classList.remove(
+    "ready",
+    "warning",
+    "danger"
+  );
+
+
+  if(
+
+    saltedEarthTimer===null
+
+  ){
+
+    saltedEarthButton.classList.add(
+      "ready"
+    );
+
+
+    t.textContent=
+      "READY";
+
+
+    return;
+
+  }
+
+
+  const r=
+    Math.max(
+
+      0,
+
+      (
+        saltedEarthTimer
+        -
+        performance.now()
+
+      )/1000
+
+    );
+
+
+  if(
+
+    r<=0
+
+  ){
+
+    saltedEarthTimer=
+      null;
+
+
+    saltedEarthButton.classList.add(
+      "ready"
+    );
+
+
+    t.textContent=
+      "READY";
+
+
+    return;
+
+  }
+
+
+  t.textContent=
+    r.toFixed(1)
+    +"s";
+
+
+  if(
+
+    r<=5
+
+  ){
+
+    saltedEarthButton.classList.add(
+      "danger"
+    );
+
+  }
+
+  else if(
+
+    r<=10
+
+  ){
+
+    saltedEarthButton.classList.add(
+      "warning"
+    );
+
+  }
+
+}
+
+
+/* ========================================
+   クリック操作
 ======================================== */
 
 guardianButton.onclick=
   toggleGuardian;
+
+
+saltedEarthButton.onclick=
+  toggleSaltedEarth;
 
 
 /* ========================================
@@ -1481,7 +1705,7 @@ document.addEventListener(
 
 
     /*
-      1～5キー
+      1～5
     */
 
     if(
@@ -1501,7 +1725,7 @@ document.addEventListener(
 
 
     /*
-      Gキー
+      Guardian
     */
 
     if(
@@ -1514,6 +1738,24 @@ document.addEventListener(
 
 
       toggleGuardian();
+
+    }
+
+
+    /*
+      Salted Earth
+    */
+
+    if(
+
+      e.key.toLowerCase()==="s"
+
+    ){
+
+      e.preventDefault();
+
+
+      toggleSaltedEarth();
 
     }
 
@@ -1583,6 +1825,10 @@ document.getElementById(
   guardianTimer=
     null;
 
+
+  saltedEarthTimer=
+    null;
+
 };
 
 
@@ -1634,6 +1880,9 @@ function loop(){
 
 
   updateGuardian();
+
+
+  updateSaltedEarth();
 
 
   requestAnimationFrame(
