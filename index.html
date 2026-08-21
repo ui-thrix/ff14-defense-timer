@@ -71,7 +71,7 @@ body{
 
 
 /* ========================================
-   タイマーバー
+   5つのタイマー
 ======================================== */
 
 #timerBar{
@@ -127,7 +127,6 @@ body{
   background:rgba(0,0,0,.18);
 }
 
-
 .jobIcon{
   width:26px;
   height:26px;
@@ -180,17 +179,55 @@ body{
 
 
 /* ========================================
-   残り10秒以下
+   27秒モード
+======================================== */
+
+#modeControls{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+#modeButton{
+  width:100%;
+  border:1px solid #666;
+  background:#29292f;
+  color:#eee;
+
+  border-radius:4px;
+
+  padding:4px 7px;
+
+  cursor:pointer;
+
+  font-size:10px;
+}
+
+#modeButton:hover{
+  background:#3b3b43;
+}
+
+
+/* 27秒モードON */
+
+#modeButton.active{
+  background:rgba(126,99,0,.97);
+  border-color:rgba(255,210,70,.7);
+  color:#fff;
+}
+
+#modeButton.active:hover{
+  background:rgba(150,115,0,.98);
+}
+
+
+/* ========================================
+   タイマー警告
 ======================================== */
 
 .timer.warning{
   background:rgba(126,99,0,.97);
 }
-
-
-/* ========================================
-   残り5秒以下
-======================================== */
 
 .timer.danger{
   background:rgba(155,35,40,.98);
@@ -205,7 +242,6 @@ body{
   display:flex;
   align-items:center;
 }
-
 
 .guardianTimer{
   width:86px;
@@ -226,11 +262,9 @@ body{
   align-items:center;
 }
 
-
 .guardianTimer:hover{
   border-color:rgba(255,255,255,.6);
 }
-
 
 .guardianTimer:active{
   transform:translateY(1px);
@@ -250,7 +284,6 @@ body{
 
   background:rgba(0,0,0,.18);
 }
-
 
 .guardianIcon{
   width:26px;
@@ -298,7 +331,6 @@ body{
   background:rgba(45,45,52,.96);
 }
 
-
 .guardianTimer.ready .guardianTime{
   font-size:16px;
   color:rgba(255,255,255,.9);
@@ -312,7 +344,6 @@ body{
 .guardianTimer.warning{
   background:rgba(126,99,0,.97);
 }
-
 
 .guardianTimer.danger{
   background:rgba(155,35,40,.98);
@@ -330,12 +361,10 @@ body{
   gap:5px;
 }
 
-
 #hint{
   font-size:9px;
   color:#999;
 }
-
 
 .control{
   border:1px solid #666;
@@ -350,7 +379,6 @@ body{
 
   font-size:10px;
 }
-
 
 .control:hover{
   background:#3b3b43;
@@ -376,11 +404,9 @@ body{
   overflow:auto;
 }
 
-
 #settings.open{
   display:block;
 }
-
 
 .note{
   font-size:9px;
@@ -390,7 +416,6 @@ body{
 
   line-height:1.35;
 }
-
 
 .setting{
   display:grid;
@@ -404,7 +429,6 @@ body{
   margin-bottom:5px;
 }
 
-
 .jobSelect{
   width:100%;
 
@@ -417,7 +441,6 @@ body{
 
   padding:5px;
 }
-
 
 .actions{
   display:flex;
@@ -472,6 +495,22 @@ body{
   ======================================== -->
 
   <div id="timerBar"></div>
+
+
+  <!-- ========================================
+       27秒モード切替
+  ======================================== -->
+
+  <div id="modeControls">
+
+    <button
+      id="modeButton"
+      type="button"
+    >
+      27秒モード：OFF
+    </button>
+
+  </div>
 
 
   <!-- ========================================
@@ -596,7 +635,6 @@ const JOBS=[
     icon:"GNB.png"
   },
 
-
   {
     abbr:"WHM",
     name:"白魔道士",
@@ -620,7 +658,6 @@ const JOBS=[
     name:"賢者",
     icon:"SGE.png"
   },
-
 
   {
     abbr:"MNK",
@@ -658,7 +695,6 @@ const JOBS=[
     icon:"VPR.png"
   },
 
-
   {
     abbr:"BRD",
     name:"吟遊詩人",
@@ -676,7 +712,6 @@ const JOBS=[
     name:"踊り子",
     icon:"DNC.png"
   },
-
 
   {
     abbr:"BLM",
@@ -718,16 +753,29 @@ const JOBS=[
 const KEY=
   "ff14-defense-jobs-app-v1";
 
-const COOLDOWN=
+const NORMAL_COOLDOWN=
   30;
+
+const DELAY_COOLDOWN=
+  27;
 
 
 /* ========================================
    状態
 ======================================== */
 
+/*
+  false = 30秒
+  true  = 27秒
+*/
+
+let delayMode=
+  false;
+
+
 let selected=
   load();
+
 
 const timers=[
   null,
@@ -736,6 +784,7 @@ const timers=[
   null,
   null
 ];
+
 
 let guardianTimer=
   null;
@@ -817,6 +866,7 @@ const bar=
     "timerBar"
   );
 
+
 const buttons=[];
 
 
@@ -873,12 +923,22 @@ for(
 
 
 /* ========================================
-   ガーディアンボタン
+   ガーディアン
 ======================================== */
 
 const guardianButton=
   document.getElementById(
     "guardianTimer"
+  );
+
+
+/* ========================================
+   27秒モードボタン
+======================================== */
+
+const modeButton=
+  document.getElementById(
+    "modeButton"
   );
 
 
@@ -923,6 +983,8 @@ function render(){
 
 
   renderSettings();
+
+  updateModeButton();
 
 }
 
@@ -1045,19 +1107,96 @@ function renderSettings(){
 
 
 /* ========================================
+   27秒モード表示更新
+======================================== */
+
+function updateModeButton(){
+
+  if(delayMode){
+
+    modeButton.textContent=
+      "27秒モード：ON";
+
+    modeButton.classList.add(
+      "active"
+    );
+
+  }else{
+
+    modeButton.textContent=
+      "27秒モード：OFF";
+
+    modeButton.classList.remove(
+      "active"
+    );
+
+  }
+
+}
+
+
+/* ========================================
+   27秒モード切替
+======================================== */
+
+modeButton.onclick=()=>{
+
+  delayMode=
+    !delayMode;
+
+
+  updateModeButton();
+
+};
+
+
+/* ========================================
+   現在の通常タイマー時間
+======================================== */
+
+function getCooldown(){
+
+  return delayMode
+    ? DELAY_COOLDOWN
+    : NORMAL_COOLDOWN;
+
+}
+
+
+/* ========================================
    防御タイマー開始 / リセット
 ======================================== */
 
 function toggleTimer(i){
 
-  timers[i]=
+  /*
+    READYなら現在のモードの秒数で開始
+  */
+
+  if(
 
     timers[i]===null
 
-      ? performance.now()
-        +COOLDOWN*1000
+  ){
 
-      : null;
+    timers[i]=
+
+      performance.now()
+      +
+      getCooldown()*1000;
+
+  }
+
+  /*
+    カウント中ならリセット
+  */
+
+  else{
+
+    timers[i]=
+      null;
+
+  }
 
 
   updateTimer(i);
@@ -1180,7 +1319,7 @@ function updateTimer(i){
 
 
 /* ========================================
-   ガーディアン開始 / リセット
+   Guardian開始 / リセット
 ======================================== */
 
 function toggleGuardian(){
@@ -1190,7 +1329,8 @@ function toggleGuardian(){
     guardianTimer===null
 
       ? performance.now()
-        +COOLDOWN*1000
+        +
+        NORMAL_COOLDOWN*1000
 
       : null;
 
@@ -1201,7 +1341,7 @@ function toggleGuardian(){
 
 
 /* ========================================
-   ガーディアン更新
+   Guardian更新
 ======================================== */
 
 function updateGuardian(){
@@ -1311,7 +1451,7 @@ function updateGuardian(){
 
 
 /* ========================================
-   ガーディアン：クリック
+   Guardianクリック
 ======================================== */
 
 guardianButton.onclick=
@@ -1340,7 +1480,9 @@ document.addEventListener(
     }
 
 
-    /* 1～5キー */
+    /*
+      1～5キー
+    */
 
     if(
 
@@ -1352,15 +1494,15 @@ document.addEventListener(
 
 
       toggleTimer(
-
         Number(e.key)-1
-
       );
 
     }
 
 
-    /* Gキー */
+    /*
+      Gキー
+    */
 
     if(
 
